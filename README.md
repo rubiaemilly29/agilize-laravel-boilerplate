@@ -1,8 +1,8 @@
 # Agilize Boilerplate
 
 ## 📋 Pré-requisitos
-* Docker
-* Docker-compose
+* docker
+* docker-compose
 
 ## 🔩 Começando
 Faça o fork desse repositório, pronto!
@@ -22,7 +22,10 @@ make serve
 
 ## 🚀 Implantação
 
-
+### Gere a chave da aplicação
+```sh
+make key-generate 
+```
 ## ⚙️ Executando os testes
 ```sh
 make all-unit-tests

@@ -1,0 +1,43 @@
+version: '3.6'
+
+#Docker services
+services:
+  db:
+    image: postgres:12
+    restart: always
+    ports:
+      - "5555:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./.containers/postgres:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db
+      - PGDATA=/var/lib/postgresql/data/db-files/
+    networks:
+      - agilize
+
+  api:
+    build:
+      context: .
+    entrypoint: /usr/sbin/entrypoint.local
+    ports:
+      - "9999:80"
+    networks:
+      - agilize
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+
+#Docker networks
+networks:
+  agilize:
+    name: agilize_agilize
+    driver: bridge
+
+#Docker volumes
+volumes:
+  db_data:
+    driver: local

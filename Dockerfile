@@ -4,9 +4,7 @@ RUN yum -y update; \
     yum clean all; \
     amazon-linux-extras install epel php8.0; \
     yum install -y \
-        rsyslog \
         wget \
-        which \
         php \
         git \
         php-{pear,pecl,cgi,common,curl,mbstring,gd,gettext,bcmath,json,xml,fpm,intl,zip,pgsql,pdo,soap} \

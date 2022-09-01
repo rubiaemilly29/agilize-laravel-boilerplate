@@ -17,3 +17,9 @@ shell:
 
 db_update:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan migrate && php artisan db:seed"
+
+all-tests:
+	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "./vendor/bin/phpunit -d memory_limit=-1"
+
+key-generate:
+	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan key:generate"

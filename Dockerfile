@@ -22,10 +22,8 @@ ADD .docker/entrypoint.local /usr/sbin/entrypoint.local
 ADD .docker/update-application /usr/sbin/update-application
 COPY .docker/etc /etc
 
-RUN chmod -v +x /usr/sbin/entrypoint; \
-    chmod -v +x /usr/sbin/entrypoint.local; \
+RUN chmod -v +x /usr/sbin/entrypoint.local; \
     chmod -v +x /usr/sbin/update-application; \
-    chmod -v +x /usr/sbin/run-command; \
     mkdir /var/www/storage/proxies; \
     chmod 777 /var/www/bootstrap -Rf; \
     chmod 777 /var/www/storage -Rf; \

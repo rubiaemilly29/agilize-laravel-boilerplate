@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Aluno
+Route::post('/aluno', [\App\Http\Controllers\AlunoController::class, 'store']);
+
+//Materia
+Route::post('/Materia', [\App\Http\Controllers\MateriaController::class, 'store']);

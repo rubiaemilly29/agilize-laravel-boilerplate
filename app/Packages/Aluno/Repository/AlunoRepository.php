@@ -3,14 +3,10 @@
 namespace App\Packages\Aluno\Repository;
 
 use App\Packages\Aluno\Model\Aluno;
-use App\Packages\Base\AbstractRepository;
+use App\Packages\Base\Repository;
 
-class AlunoRepository extends AbstractRepository
+class AlunoRepository extends Repository
 {
     public string $entityName = Aluno::class;
 
-    public function add(object $entity): void
-    {
-        $this->_em->persist($entity);
-    }
 }

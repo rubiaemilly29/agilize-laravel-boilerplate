@@ -9,11 +9,11 @@ use App\Packages\Prova\Repository\MateriaRepository;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Illuminate\Http\Request;
 
-class MateriaController
+class PerguntasController
 {
 
     public function __construct(
-        protected MateriaRepository $materiaRepository
+        protected PerguntaRepository $materiaRepository
     )
     {
 

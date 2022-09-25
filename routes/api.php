@@ -19,3 +19,6 @@ Route::post('/aluno', [\App\Http\Controllers\AlunoController::class, 'store']);
 
 //Materia
 Route::post('/materia', [\App\Http\Controllers\MateriaController::class, 'store']);
+
+//Pergunta
+Route::post('/pergunta', [\App\Http\Controllers\PerguntasController::class, 'store']);

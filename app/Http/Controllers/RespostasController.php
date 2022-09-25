@@ -10,7 +10,7 @@ use App\Packages\Prova\Repository\PerguntaRepository;
 use Illuminate\Http\Request;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
-class PerguntasController
+class RespostasController
 {
 
     public function __construct(
@@ -23,15 +23,11 @@ class PerguntasController
 
     public function store(Request $request)
     {
-        $materiaRequest = $request->get('materia');
         $perguntaRequest = $request->get('pergunta');
+        $respostas = $request->get('resposta');
+        $respostaCorreta = $request->get('respostaCorreta');
 
-        if(strlen(trim($materiaRequest)) < 1) {
-            return response('Materia deve existir',HttpStatus::BAD_REQUEST);
-        }
-        if(strlen(trim($perguntaRequest)) < 1) {
-            return response('Materia deve existir',HttpStatus::BAD_REQUEST);
-        }
+        dd($respostas);
 
         $mat = $this->materiaRepository->findBy(["materia"=>$materiaRequest]);
 
@@ -39,7 +35,7 @@ class PerguntasController
         $this->perguntaRepository->add($pergunta);
 
         EntityManager::flush();
-        return response("A pergunta: '$perguntaRequest' foi cadastrada", HttpStatus::CREATED);
+        return response(, HttpStatus::CREATED);
     }
 
 

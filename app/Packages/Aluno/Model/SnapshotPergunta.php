@@ -26,8 +26,8 @@ class SnapshotPergunta
     /** @ORM\Column(type="string") */
     protected string $pergunta;
 
-    /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\Prova", inversedBy="snapshotPergunta") */
-    protected string $prova;
+    /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\Prova", cascade={"persist", "remove"}, inversedBy="snapshotPergunta") */
+    protected Prova $prova;
 
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotResposta", mappedBy="snapshotPergunta") */
     protected Collection $resposta;

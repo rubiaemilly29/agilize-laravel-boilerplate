@@ -24,19 +24,20 @@ class SnapshotResposta
     /** @ORM\Column(type="boolean") */
     protected bool $respostaCorreta;
 
-
-    protected string $snapshotPergunta;
+    /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", cascade={"persist", "remove"}, inversedBy="snapshotResposta") */
+    protected SnapshotPergunta $snapshotPergunta;
 
     protected string $descricao;
 
     /** @ORM\Column(type="boolean") */
     protected  string $respostaEscolhida;
 
-    public function __construct(string $descricao, bool $respostaEscolhida = false, bool $respostaCorreta = false)
+    public function __construct(string $descricao, SnapshotPergunta $snapshotPergunta,  bool $respostaEscolhida = false, bool $respostaCorreta = false)
     {
         $this->id = Str::uuid()->toString();
         $this->descricao = $descricao;
         $this->respostaEscolhida = $respostaEscolhida;
         $this->respostaCorreta = $respostaCorreta;
+        $this->snapshotPergunta = $snapshotPergunta;
     }
 }

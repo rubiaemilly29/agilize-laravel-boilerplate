@@ -73,11 +73,12 @@ class Materia
     }
 
     /**
-     * @param Collection $pergunta
+     * @param Pergunta $pergunta
      */
-    public function setPergunta(Collection $pergunta): void
+    public function setPergunta(Pergunta $pergunta): void
     {
-        $this->pergunta = $pergunta;
+        $this->pergunta->add($pergunta);
+        $pergunta->setMateria($this);
     }
 
 

@@ -24,7 +24,7 @@ class SnapshotResposta
     /** @ORM\Column(type="boolean") */
     protected bool $respostaCorreta;
 
-    /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", cascade={"persist", "remove"}, inversedBy="snapshotResposta") */
+    /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", cascade={"persist", "remove"}, inversedBy="snapshotResposta") */
     protected SnapshotPergunta $snapshotPergunta;
 
     protected string $descricao;

@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class Repository extends AbstractRepository
 {
+
     protected array $defaultOrderings = [];
 
     public function add(object $entity): void

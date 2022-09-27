@@ -24,50 +24,21 @@ class Resposta
     /** @ORM\Column(type="boolean") */
     protected bool $respostaCorreta;
 
-    /** @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Model\Pergunta",  cascade={"persist", "remove"}, inversedBy="resposta")
+    /** @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Model\Pergunta",inversedBy="resposta")
      *  @ORM\JoinColumn(name="pergunta_id", referencedColumnName="id")
      */
+    protected Pergunta $pergunta;
 
-    protected string $pergunta;
-
+    /**
+     * @ORM\Column(type="string")
+     */
     protected string $descricao;
 
-    public function __construct(string $descricao, $respostaCorreta = false)
+    public function __construct(string $descricao, Pergunta $pergunta, ?bool $respostaCorreta = false)
     {
         $this->id = Str::uuid()->toString();
         $this->descricao = $descricao;
+        $this->pergunta = $pergunta;
         $this->respostaCorreta = $respostaCorreta;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return bool|mixed
-     */
-    public function getRespostaCorreta(): mixed
-    {
-        return $this->respostaCorreta;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPergunta(): string
-    {
-        return $this->pergunta;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescricao(): string
-    {
-        return $this->descricao;
     }
 }

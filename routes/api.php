@@ -22,3 +22,6 @@ Route::post('/materia', [\App\Http\Controllers\MateriaController::class, 'store'
 
 //Pergunta
 Route::post('/pergunta', [\App\Http\Controllers\PerguntasController::class, 'store']);
+
+//Resposta
+Route::post('/resposta', [\App\Http\Controllers\RespostasController::class, 'store']);

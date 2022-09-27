@@ -25,3 +25,6 @@ Route::post('/pergunta', [\App\Http\Controllers\PerguntasController::class, 'sto
 
 //Resposta
 Route::post('/resposta', [\App\Http\Controllers\RespostasController::class, 'store']);
+
+//Prova
+Route::get('/prova', [\App\Http\Controllers\ProvaController::class, 'create']);

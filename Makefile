@@ -13,7 +13,7 @@ serve:
 	@docker-compose -f ./docker-compose.yaml up
 
 shell:
-	@docker-compose -f ./docker-compose.yaml exec api bash
+	@docker-compose -f ./docker-compose.yaml exec api_pdi bash
 
 db_update:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan migrate && php artisan db:seed"

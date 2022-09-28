@@ -26,16 +26,15 @@ class PerguntasController
         $materiaRequest = $request->get('materia');
         $perguntaRequest = $request->get('pergunta');
 
-        if(strlen(trim($materiaRequest)) < 1) {
-            return response('Materia deve existir',HttpStatus::BAD_REQUEST);
-        }
-        if(strlen(trim($perguntaRequest)) < 1) {
-            return response('Materia deve existir',HttpStatus::BAD_REQUEST);
+        $naoExistePergunta = strlen(trim($perguntaRequest)) < 1;
+        $naoExisteMateria = strlen(trim($materiaRequest)) < 1;
+        if($naoExisteMateria || $naoExistePergunta) {
+            return response('Materia e Pergunta deve existir',HttpStatus::BAD_REQUEST);
         }
 
-        $mat = $this->materiaRepository->findBy(["materia"=>$materiaRequest]);
+        $mat = $this->materiaRepository->getNomeMateria($materiaRequest);
 
-        $pergunta = new Pergunta($perguntaRequest, $mat[0]);
+        $pergunta = new Pergunta($perguntaRequest, $mat);
         $this->perguntaRepository->add($pergunta);
 
         EntityManager::flush();

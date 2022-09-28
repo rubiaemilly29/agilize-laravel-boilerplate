@@ -9,4 +9,8 @@ class AlunoRepository extends Repository
 {
     public string $entityName = Aluno::class;
 
+    public function getNomeAluno($aluno)
+    {
+       return $this->findBy(['nome'=>$aluno])[0];
+    }
 }

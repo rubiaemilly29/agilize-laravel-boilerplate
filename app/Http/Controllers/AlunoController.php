@@ -26,7 +26,7 @@ class AlunoController
         if(strlen(trim($aluno)) < 3) {
             return response('O aluno deve ter mais que 3 letras',HttpStatus::BAD_REQUEST);
         }
-        if($this->alunoRepository->findBy(['nome'=>$aluno]))
+        if($this->alunoRepository->getNomeAluno($aluno))
         {
             return response('O aluno ja existe',HttpStatus::BAD_REQUEST);
         }

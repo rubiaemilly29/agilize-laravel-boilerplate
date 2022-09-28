@@ -41,7 +41,7 @@ class Prova
 
     protected float $notaTotal;
 
-    public function __construct(string $status, int $quantidadeQuestao, float $notaTotal, \DateTime $inicioTempo, \DateTime $finalTempo)
+    public function __construct(string $status, int $quantidadeQuestao, float $notaTotal, ?\DateTime $inicioTempo, ?\DateTime $finalTempo)
     {
         $this->id = Str::uuid()->toString();
         $this->status = $status;

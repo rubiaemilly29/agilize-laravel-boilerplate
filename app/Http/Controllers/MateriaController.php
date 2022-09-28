@@ -25,7 +25,7 @@ class MateriaController
         if(strlen(trim($materia)) < 1) {
             return response('Materia deve existir',HttpStatus::BAD_REQUEST);
         }
-        if($this->materiaRepository->findBy(['materia'=>$materia]))
+        if($this->materiaRepository->getNomeMateria($materia))
         {
             return response('Materia ja existe',HttpStatus::BAD_REQUEST);
         }

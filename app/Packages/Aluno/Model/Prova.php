@@ -21,12 +21,8 @@ class Prova
      */
     protected string $id;
 
-
     /** @ORM\Column(type="string") */
     protected string $status;
-
-
-    protected string $materia;
 
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", mappedBy="prova") */
     protected Collection $pergunta;
@@ -37,11 +33,13 @@ class Prova
     /** @var \DateTime @ORM\Column(nullable = true) */
     protected \DateTime $finalTempo;
 
+    /** @ORM\Column(type="integer") */
     protected int $quantidadeQuestao;
 
+    /** @ORM\Column(type="float") */
     protected float $notaTotal;
 
-    public function __construct(string $status, int $quantidadeQuestao, float $notaTotal, ?\DateTime $inicioTempo, ?\DateTime $finalTempo)
+    public function __construct( string $status, int $quantidadeQuestao, ?float $notaTotal, ?\DateTime $inicioTempo, ?\DateTime $finalTempo)
     {
         $this->id = Str::uuid()->toString();
         $this->status = $status;

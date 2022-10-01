@@ -11,8 +11,8 @@ use App\Packages\Prova\Repository\RespostaRepository;
 class ProvaService
 {
 
-    const MIN = 5;
-    const MAX = 11;
+    const MIN = 1;
+    const MAX = 3;
 
     public function __construct(
         protected AlunoRepository $alunoRepository,
@@ -27,8 +27,9 @@ class ProvaService
     {
         $alunoDb = $this->alunoRepository->getNomeAluno($aluno);
         $materiaId = $this->materiaRepository->getIdMateriaByNome($materia);
-
-
+        $quantidadePergunta = $this->quantidadeAleatoriaPerguntas();
+        $perguntasAleatorias = $this->perguntaRepository->getAleatoriasPerguntas($materiaId,$quantidadePergunta);
+        dd($perguntasAleatorias[0]->getResposta()->toArray());
     }
 
     public function quantidadeAleatoriaPerguntas()

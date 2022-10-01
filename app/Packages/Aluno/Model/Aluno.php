@@ -28,7 +28,7 @@ class Aluno
 
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\Prova", mappedBy="Aluno") */
 
-    protected ?Collection $prova;
+    protected Collection $prova;
 
     public function __construct(string $nome)
     {

@@ -30,9 +30,6 @@ class Materia
 
     protected Collection $pergunta;
 
-    /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\Prova", mappedBy="materia") */
-
-    protected Collection $prova;
 
     public function __construct(string $materia)
     {

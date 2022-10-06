@@ -3,6 +3,7 @@
 namespace App\Packages\Aluno\Model;
 
 
+use App\Packages\Prova\Model\Pergunta;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -34,10 +35,50 @@ class SnapshotPergunta
 
     protected  float $valorQuestao;
 
-    public function __construct(string $pergunta, int $valorQuestao)
+    public function __construct(Prova $prova, Pergunta $pergunta, int $numeroQuestao, $valorProva)
     {
         $this->id = Str::uuid()->toString();
-        $this->pergunta = $pergunta;
-        $this->valorQuestao = $valorQuestao;
+        $this->pergunta = $pergunta->getPergunta();
+        $this->valorQuestao = $valorProva / $numeroQuestao;
+        $this->prova = $prova;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Prova
+     */
+    public function getProva(): Prova
+    {
+        return $this->prova;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPergunta(): string
+    {
+        return $this->pergunta;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getResposta(): Collection
+    {
+        return $this->resposta;
+    }
+    /**
+     * @return float|int
+     */
+    public function getValorQuestao(): float|int
+    {
+        return $this->valorQuestao;
     }
 }

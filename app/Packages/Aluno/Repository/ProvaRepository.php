@@ -12,6 +12,6 @@ class ProvaRepository extends Repository
 
     public function getProva($id)
     {
-        return $this->findBy(['nome'=>$id])[0];
+        return $this->findBy(['id'=>$id])[0];
     }
 }

@@ -41,4 +41,37 @@ class Resposta
         $this->pergunta = $pergunta;
         $this->respostaCorreta = $respostaCorreta;
     }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getRespostaCorreta(): ?bool
+    {
+        return $this->respostaCorreta;
+    }
+
+    /**
+     * @return Pergunta
+     */
+    public function getPergunta(): Pergunta
+    {
+        return $this->pergunta;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescricao(): string
+    {
+        return $this->descricao;
+    }
+
 }

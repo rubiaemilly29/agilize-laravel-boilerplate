@@ -2,6 +2,7 @@
 
 namespace App\Packages\Aluno\Model;
 
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -21,7 +22,7 @@ class Prova
      */
     protected string $id;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="boolean") */
     protected string $status;
 
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", mappedBy="prova") */
@@ -36,17 +37,99 @@ class Prova
     /** @ORM\Column(type="integer") */
     protected int $quantidadeQuestao;
 
-    /** @ORM\Column(type="float") */
+    /** @ORM\Column(type="float", nullable = true) */
     protected float $notaTotal;
 
-    public function __construct( string $status, int $quantidadeQuestao, ?float $notaTotal, ?\DateTime $inicioTempo, ?\DateTime $finalTempo)
+    /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\Aluno", cascade={"persist", "remove"}, inversedBy="Prova") */
+    protected Aluno $aluno;
+
+
+    public function __construct(Aluno $aluno, int $quantidadeQuestao,bool $status= true)
     {
         $this->id = Str::uuid()->toString();
         $this->status = $status;
         $this->quantidadeQuestao = $quantidadeQuestao;
-        $this->notaTotal = $notaTotal;
-        $this->inicioTempo = $inicioTempo;
+        $this->inicioTempo = Carbon::now();
+        $this->aluno = $aluno;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getStatus(): bool|string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPergunta(): Collection
+    {
+        return $this->pergunta;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getInicioTempo(): \DateTime|Carbon
+    {
+        return $this->inicioTempo;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFinalTempo(): \DateTime
+    {
+        return $this->finalTempo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantidadeQuestao(): int
+    {
+        return $this->quantidadeQuestao;
+    }
+
+    /**
+     * @return float
+     */
+    public function getNotaTotal(): float
+    {
+        return $this->notaTotal;
+    }
+
+    /**
+     * @return Aluno
+     */
+    public function getAluno(): Aluno
+    {
+        return $this->aluno;
+    }
+
+    /**
+     * @param \DateTime $finalTempo
+     */
+    public function setFinalTempo(\DateTime $finalTempo): void
+    {
         $this->finalTempo = $finalTempo;
     }
 
+    /**
+     * @param float $notaTotal
+     */
+    public function setNotaTotal(float $notaTotal): void
+    {
+        $this->notaTotal = $notaTotal;
+    }
 }

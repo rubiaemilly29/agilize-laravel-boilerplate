@@ -41,7 +41,7 @@ class SnapshotPergunta
     {
         $this->id = Str::uuid()->toString();
         $this->pergunta = $pergunta->getPergunta();
-        $this->valorQuestao = $valorProva / $numeroQuestao;
+        $this->valorQuestao = round($valorProva / $numeroQuestao, 1);
         $this->prova = $prova;
     }
 

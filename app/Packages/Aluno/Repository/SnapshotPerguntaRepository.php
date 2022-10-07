@@ -14,9 +14,4 @@ class SnapshotPerguntaRepository extends Repository
     {
         return $this->findBy(['prova'=>$id]);
     }
-
-    public function createS()
-    {
-        
-    }
 }

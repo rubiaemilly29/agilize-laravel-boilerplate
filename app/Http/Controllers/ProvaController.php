@@ -21,7 +21,7 @@ class ProvaController extends Controller
     {
        $req = !$request->get('aluno')  || !$request->get('materia') ? response('Deve existir um Aluno e uma Materia',HttpStatus::BAD_REQUEST) :$request;
         $provaServiceCreateAndReturnId = $this->provaService->createProva($req->get('aluno'), $req->get('materia'));
-        $getProvaDb =$this->provaService->getProvaDb($provaServiceCreateAndReturnId);
+        $getProvaDb =$this->provaService->getPerguntasRespostasDb($provaServiceCreateAndReturnId);
 
         $response = [
             'Aluno'=>$request->get('aluno'),
@@ -42,6 +42,8 @@ class ProvaController extends Controller
             return response('Tempo da prova expirado',HttpStatus::BAD_REQUEST);
         }
         $this->provaService->corrigeProva($perguntasRespostas, $idProva);
+        $prova = $this->provaService->retornaProva($idProva);
 
+        return response()->json([$prova]);
     }
 }

@@ -21,7 +21,7 @@ class ProvaService
 {
 
     const MIN = 2;
-    const MAX = 5;
+    const MAX = 3;
 
     public function __construct(
         protected AlunoRepository $alunoRepository,
@@ -64,14 +64,12 @@ class ProvaService
         return $prova;
     }
 
-
-
-    public function getProvaDb(Prova $prova):array
+    public function getPerguntasRespostasDb(Prova $prova):array
     {
         $perguntaDb = $this->snapshotPerguntaRepository->getPerguntaSnapshot($prova->getId());
         $perguntasAlternativas = [];
         foreach ($perguntaDb as $pergunta){
-            $respostaDb = $this->snapshotRespostaRepository->getReapostaSnapshot($pergunta->getId());
+            $respostaDb = $this->snapshotRespostaRepository->getAllReapostaSnapshot($pergunta->getId());
             $resposta= array_map(function ($item) {
                 $idDescricao = collect();
                 $idDescricao ->add([
@@ -95,15 +93,65 @@ class ProvaService
 
     public function corrigeProva(array $perguntasRespostas, string $idProva)
     {
-        $perguntaDb = $this->snapshotPerguntaRepository->getPerguntaSnapshot($idProva);
-       foreach ($perguntaDb as $pergunta){
-       }
+        $prova = $this->provaRepository->getProva($idProva);
+        $perguntas = $prova->getPergunta();
+        $valorDaQuestão = $perguntas[0]->getValorQuestao();
+        $status = $this->provaRepository->getStatusProva($idProva);
+        if(!$status) {
+            foreach ($perguntasRespostas as $pergunta) {
+                $alternativa = $pergunta['alternativas'][0];
+                $idAlternativa = $alternativa['id'];
+                $resposta = $this->snapshotRespostaRepository->getRespostaId($idAlternativa);
+                $respostaCorreta = $resposta->isRespostaCorreta();
+
+                $this->snapshotRespostaRepository->setRespostaEscolhidaSnapshot($resposta);
+
+                if ($respostaCorreta) {
+                    $this->provaRepository->setNotaDb($idProva, $valorDaQuestão);
+                }
+
+            }
+        }
     }
 
     public function validaTempo(string $idProva)
     {
-        $r = $this->provaRepository->getProva($idProva)->getInicioTempo();
-        $re = \Carbon\Carbon::now()->diffInHours(Carbon::parse($r->format('Y-m-d H:i:s'))) > 1;
+        $inicio = $this->provaRepository->getProva($idProva)->getInicioTempo();
+        $this->provaRepository->setFinal($idProva, \Carbon\Carbon::now());
+        $re = \Carbon\Carbon::now()->diffInHours(Carbon::parse($inicio->format('Y-m-d H:i:s'))) > 1;
         return $re;
     }
+
+    public function retornaProva($id)
+    {
+        $prova = $this->provaRepository->getProva($id);
+        $perguntas = $prova->getPergunta();
+        $perguntasCollection = collect();
+
+        foreach ($perguntas as $pergunta){
+
+            $respostasCollection = collect();
+            $correta = $this->snapshotRespostaRepository->getRespostaCorreta($pergunta->getId());
+            $escolhida = $this->snapshotRespostaRepository->getRespostaEscolhida($pergunta->getId());
+            $respostasCollection->add([
+                'Resposta Correta'=>$correta->getDescricao(),
+                'Resposta Escolhida' => $escolhida->getDescricao()
+            ]);
+
+            $perguntasCollection->add([
+
+                'pergunta' => $pergunta->getPergunta(),
+                'alternativa' => $respostasCollection[0]
+            ]);
+
+        }
+            $retornoProva = [
+                'Aluno'=> $prova->getAluno()->getNome(),
+                'Status'=> $prova->getStatus(),
+                'Nota Total' => $prova->getNotaTotal(),
+                $perguntasCollection->toArray()
+            ];
+        return $retornoProva;
+    }
+
 }

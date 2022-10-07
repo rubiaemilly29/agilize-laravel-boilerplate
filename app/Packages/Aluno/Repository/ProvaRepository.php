@@ -9,17 +9,34 @@ use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class ProvaRepository extends Repository
 {
+    const CONCLUIDO = 'concluido';
     public string $entityName = Prova::class;
 
     public function getProva($id)
     {
         return $this->findBy(['id'=>$id])[0];
     }
-
-    public function createProva($alunoDb, $quantidadePergunta)
+    public function setNotaDb($id, $valorDaQuestão)
     {
-        $prova = new Prova($alunoDb, $quantidadePergunta);
-        $this->add($prova);
-        return $prova;
+        $prova = $this->findBy(['id'=>$id])[0];
+        $prova->setNotaTotal($valorDaQuestão);
+        $prova->setStatus(self::CONCLUIDO);
+        EntityManager::flush();
+        return $prova->getNotaTotal();
+    }
+
+    public function setFinal($id, $now)
+    {
+        $prova = $this->findBy(['id'=>$id])[0];
+        $prova->setFinalTempo($now);
+        EntityManager::flush();
+    }
+    public function getStatusProva($id)
+    {
+        $status = $this->findBy(['id'=>$id, 'status'=>'concluido']);
+
+         if(!empty($status) && $status[0]->getStatus() == self::CONCLUIDO){
+             return true;
+         }
     }
 }

@@ -37,7 +37,7 @@ class Prova
     /** @ORM\Column(type="integer") */
     protected int $quantidadeQuestao;
 
-    /** @ORM\Column(type="float", nullable = true) */
+    /** @ORM\Column(type="float") */
     protected float $notaTotal;
 
     /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\Aluno", cascade={"persist", "remove"}, inversedBy="Prova") */
@@ -55,6 +55,7 @@ class Prova
         $this->inicioTempo = Carbon::createFromFormat('Y-m-d H:i:s', now());
         $this->aluno = $aluno;
         $this->materia = $materia;
+        $this->notaTotal = 0.0;
     }
 
     /**
@@ -135,6 +136,14 @@ class Prova
      */
     public function setNotaTotal(float $notaTotal): void
     {
-        $this->notaTotal = $notaTotal;
+        $this->notaTotal += $notaTotal;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 }

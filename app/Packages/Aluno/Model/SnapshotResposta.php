@@ -30,15 +30,16 @@ class SnapshotResposta
     /** @ORM\Column(type="string") */
     protected string $descricao;
 
-    /** @ORM\Column(type="boolean", nullable = true) */
-    protected  string $respostaEscolhida;
+    /** @ORM\Column(type="boolean") */
+    protected  bool $respostaEscolhida;
 
-    public function __construct(string $descricao, SnapshotPergunta $snapshotPergunta, bool $respostaCorreta = false)
+    public function __construct(string $descricao, SnapshotPergunta $snapshotPergunta, bool $respostaCorreta = false, bool $respostaEscolhida = false)
     {
         $this->id = Str::uuid()->toString();
         $this->descricao = $descricao;
         $this->respostaCorreta = $respostaCorreta;
         $this->snapshotPergunta = $snapshotPergunta;
+        $this->respostaEscolhida= $respostaEscolhida;
     }
 
     /**
@@ -56,6 +57,7 @@ class SnapshotResposta
     {
         return $this->respostaCorreta;
     }
+
 
     /**
      * @return SnapshotPergunta
@@ -76,9 +78,17 @@ class SnapshotResposta
     /**
      * @return string
      */
-    public function getRespostaEscolhida(): string
+    public function getRespostaEscolhida(): bool
     {
         return $this->respostaEscolhida;
+    }
+
+    /**
+     * @param string $respostaEscolhida
+     */
+    public function setRespostaEscolhida(bool $respostaEscolhida): void
+    {
+        $this->respostaEscolhida = $respostaEscolhida;
     }
 
 }

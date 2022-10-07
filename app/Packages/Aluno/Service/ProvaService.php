@@ -13,14 +13,15 @@ use App\Packages\Prova\Repository\MateriaRepository;
 use App\Packages\Prova\Repository\PerguntaRepository;
 use App\Packages\Prova\Repository\RespostaRepository;
 use App\Packages\Aluno\Repository\SnapshotPerguntaRepository;
+use Carbon\Carbon;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 
 class ProvaService
 {
 
-    const MIN = 1;
-    const MAX = 4;
+    const MIN = 2;
+    const MAX = 5;
 
     public function __construct(
         protected AlunoRepository $alunoRepository,
@@ -35,62 +36,74 @@ class ProvaService
     {
     }
 
-    public function createProva($aluno, $materia)
+    public function createProva(string $aluno, string $materia): Prova
     {
         $alunoDb = $this->alunoRepository->getNomeAluno($aluno);
         $materiaId = $this->materiaRepository->getIdMateriaByNome($materia);
         $quantidadePergunta = $this->quantidadeAleatoriaPerguntas();
         $perguntasAleatorias = $this->perguntaRepository->getAleatoriasPerguntas($materiaId,$quantidadePergunta);
-        $prova = new Prova($alunoDb, $quantidadePergunta );
+        $prova = new Prova($alunoDb, $quantidadePergunta, $materia);
         $this->provaRepository->add($prova);
 
-        $this->saveSnapshotProva($perguntasAleatorias, $prova, $quantidadePergunta);
+        foreach ($perguntasAleatorias as $pergunta) {
+            $snapshotPergunta = new SnapshotPergunta($prova, $pergunta, $quantidadePergunta, 10);
+            $this->snapshotPerguntaRepository->add($snapshotPergunta);
+            $respostas = $pergunta->getResposta()->toArray();
+            foreach ($respostas as $resposta){
+                $this->snapshotRespostaRepository->add(
+                    new SnapshotResposta(
+                        $resposta->getDescricao(),
+                        $snapshotPergunta,
+                        $resposta->getRespostaCorreta()
+                    )
+                );
+            }
+        }
+        EntityManager::flush();
+
+        return $prova;
     }
 
-    public function getProvaDb(/*Prova $prova*/ $id)
+
+
+    public function getProvaDb(Prova $prova):array
     {
-        $provaDb = $this->provaRepository->getProva(/*$prova->getId()*/$id);
-        $perguntaDb = $provaDb->getPergunta()->toArray();
-        $perguntasAlternativas = collect();
+        $perguntaDb = $this->snapshotPerguntaRepository->getPerguntaSnapshot($prova->getId());
+        $perguntasAlternativas = [];
         foreach ($perguntaDb as $pergunta){
-            $respostaDb = $pergunta->getResposta()->map(function ($item) {
+            $respostaDb = $this->snapshotRespostaRepository->getReapostaSnapshot($pergunta->getId());
+            $resposta= array_map(function ($item) {
                 $idDescricao = collect();
                 $idDescricao ->add([
                     'id'=> $item->getId(),
                     'descricao'=>$item->getDescricao()
                 ]);
                 return $idDescricao[0];
-            });
-            $perguntasAlternativas->add([
+            }, $respostaDb);
+            $perguntasAlternativas[] = [
                 'pergunta'=>$pergunta->getPergunta(),
-                'alternativas'=>$respostaDb->toArray()[0]
-            ]);
+                'alternativas'=>$resposta
+            ];
         }
-        dd($perguntasAlternativas);
+        return $perguntasAlternativas;
     }
 
-    public function quantidadeAleatoriaPerguntas()
+    public function quantidadeAleatoriaPerguntas():int
     {
         return rand(self::MIN, self::MAX);
     }
 
-    /**
-     * @param mixed $perguntasAleatorias
-     * @param Prova $prova
-     * @param int $quantidadePergunta
-     * @return void
-     */
-    public function saveSnapshotProva(mixed $perguntasAleatorias, Prova $prova, int $quantidadePergunta): void
+    public function corrigeProva(array $perguntasRespostas, string $idProva)
     {
-        foreach ($perguntasAleatorias as $pergunta) {
-            $snapshotPergunta = new SnapshotPergunta($prova, $pergunta, $quantidadePergunta, 10);
-            $respostas = $pergunta->getResposta()->toArray();
+        $perguntaDb = $this->snapshotPerguntaRepository->getPerguntaSnapshot($idProva);
+       foreach ($perguntaDb as $pergunta){
+       }
+    }
 
-            $this->snapshotPerguntaRepository->add($snapshotPergunta);
-            foreach ($respostas as $resposta)
-                $this->snapshotRespostaRepository->add(new SnapshotResposta($resposta->getDescricao(), $snapshotPergunta, $resposta->getRespostaCorreta()));
-
-        }
-        EntityManager::flush();
+    public function validaTempo(string $idProva)
+    {
+        $r = $this->provaRepository->getProva($idProva)->getInicioTempo();
+        $re = \Carbon\Carbon::now()->diffInHours(Carbon::parse($r->format('Y-m-d H:i:s'))) > 1;
+        return $re;
     }
 }

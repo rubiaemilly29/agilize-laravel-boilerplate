@@ -22,7 +22,7 @@ class Prova
      */
     protected string $id;
 
-    /** @ORM\Column(type="boolean") */
+    /** @ORM\Column(type="string") */
     protected string $status;
 
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotPergunta", mappedBy="prova") */
@@ -43,14 +43,18 @@ class Prova
     /** @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Model\Aluno", cascade={"persist", "remove"}, inversedBy="Prova") */
     protected Aluno $aluno;
 
+    /**@ORM\Column(type="string")**/
+    protected string $materia;
 
-    public function __construct(Aluno $aluno, int $quantidadeQuestao,bool $status= true)
+
+    public function __construct(Aluno $aluno, int $quantidadeQuestao, string $materia, string $status= 'iniciado')
     {
         $this->id = Str::uuid()->toString();
         $this->status = $status;
         $this->quantidadeQuestao = $quantidadeQuestao;
-        $this->inicioTempo = Carbon::now();
+        $this->inicioTempo = Carbon::createFromFormat('Y-m-d H:i:s', now());
         $this->aluno = $aluno;
+        $this->materia = $materia;
     }
 
     /**
@@ -60,6 +64,7 @@ class Prova
     {
         return $this->id;
     }
+
 
     /**
      * @return bool|string

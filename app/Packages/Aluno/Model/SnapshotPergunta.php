@@ -33,6 +33,8 @@ class SnapshotPergunta
     /** @ORM\OneToMany(targetEntity="\App\Packages\Aluno\Model\SnapshotResposta", mappedBy="snapshotPergunta") */
     protected Collection $resposta;
 
+    /** @ORM\Column(type="float") */
+
     protected  float $valorQuestao;
 
     public function __construct(Prova $prova, Pergunta $pergunta, int $numeroQuestao, $valorProva)

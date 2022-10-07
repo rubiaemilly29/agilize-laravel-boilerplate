@@ -12,6 +12,11 @@ class SnapshotPerguntaRepository extends Repository
 
     public function getPerguntaSnapshot($id)
     {
-        return $this->findBy(['id'=>$id])[0];
+        return $this->findBy(['prova'=>$id]);
+    }
+
+    public function createS()
+    {
+        
     }
 }

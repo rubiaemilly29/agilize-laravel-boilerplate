@@ -12,6 +12,11 @@ class SnapshotRespostaRepository extends Repository
 
     public function getReapostaSnapshot($id)
     {
-        return $this->findBy(['id'=>$id])[0];
+        return $this->findBy(['snapshotPergunta'=>$id]);
+    }
+
+    public function createRespostaSnapshot()
+    {
+        
     }
 }

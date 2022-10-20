@@ -32,7 +32,7 @@ class PerguntasController
             return response('Materia e Pergunta deve existir',HttpStatus::BAD_REQUEST);
         }
 
-        $mat = $this->materiaRepository->getNomeMateria($materiaRequest);
+        $mat = $this->materiaRepository->getNomeMateria($materiaRequest)[0];
 
         $pergunta = new Pergunta($perguntaRequest, $mat);
         $this->perguntaRepository->add($pergunta);

@@ -11,6 +11,6 @@ class AlunoRepository extends Repository
 
     public function getNomeAluno($aluno)
     {
-       return $this->findBy(['nome'=>$aluno])[0];
+       return $this->findBy(['nome'=>$aluno]);
     }
 }

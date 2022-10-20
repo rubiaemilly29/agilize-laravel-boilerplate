@@ -11,7 +11,7 @@ class MateriaRepository extends Repository
 
     public function getNomeMateria($materia)
     {
-        return $this->findBy(['materia'=>$materia])[0];
+        return $this->findBy(['materia'=>$materia]);
     }
 
     public function getIdMateriaByNome($materia)

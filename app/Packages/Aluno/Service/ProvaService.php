@@ -38,7 +38,7 @@ class ProvaService
 
     public function createProva(string $aluno, string $materia): Prova
     {
-        $alunoDb = $this->alunoRepository->getNomeAluno($aluno);
+        $alunoDb = $this->alunoRepository->getNomeAluno($aluno)[0];
         $materiaId = $this->materiaRepository->getIdMateriaByNome($materia);
         $quantidadePergunta = $this->quantidadeAleatoriaPerguntas();
         $perguntasAleatorias = $this->perguntaRepository->getAleatoriasPerguntas($materiaId,$quantidadePergunta);
